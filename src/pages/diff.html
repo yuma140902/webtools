@@ -1,0 +1,26 @@
+---
+title: Diff Tool
+author: yuma
+head: "<script src='https://unpkg.com/prettydiff@101.2.6/js/browser.js'></script><link rel='stylesheet' href='https://unpkg.com/prettydiff@101.2.6/css/index.css' type='text/css' media='all'>"
+---
+<textarea name="text1" id="text1"></textarea>
+<textarea name="text2" id="text2"></textarea>
+<button type="button" onclick="execute()">差分表示</button>
+<div id="prettydiff"></div>
+<script>
+  function execute() {
+    const text1 = document.getElementById('text1').value;
+    const text2 = document.getElementById('text2').value;
+    window.prettydiff.options.source_label = "A";
+    window.prettydiff.options.source = text1;
+    window.prettydiff.options.diff_label = "B";
+    window.prettydiff.options.diff = text2;
+    window.prettydiff.options.mode = "diff";
+    window.prettydiff.options.language = "auto";
+    window.prettydiff.options.lexer = "text";
+    window.prettydiff.options.wrap = 0;
+    window.prettydiff.options.diff_view = "sidebyside";
+    const output = window.prettydiff();
+    document.getElementById("prettydiff").innerHTML = output;
+  }
+</script>

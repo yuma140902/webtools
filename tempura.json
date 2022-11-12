@@ -1,0 +1,17 @@
+{
+  "generator": {
+    "rules": [
+      {
+        "match": ".*[.]html",
+        "generator": "handlebars",
+        "template": "src/templates/html.html.hbs"
+      },
+      {
+        "match": ".*[.]md",
+        "generator": "handlebars",
+        "export_extension": "html",
+        "template": "src/templates/page.html.hbs"
+      }
+    ]
+  }
+}
