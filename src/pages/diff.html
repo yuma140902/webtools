@@ -3,24 +3,138 @@ title: Diff Tool
 author: yuma
 head: "<script src='https://unpkg.com/prettydiff@101.2.6/js/browser.js'></script><link rel='stylesheet' href='https://unpkg.com/prettydiff@101.2.6/css/index.css' type='text/css' media='all'>"
 ---
-<textarea name="text1" id="text1"></textarea>
-<textarea name="text2" id="text2"></textarea>
-<button type="button" onclick="execute()">差分表示</button>
-<div id="prettydiff"></div>
+<style>
+    textarea {
+        box-sizing: border-box;
+        width: 47%;
+        height: 60vh;
+    }
+
+    #execute_btn {
+        width: 94%;
+    }
+</style>
+<details>
+  <summary>詳細設定</summary>
+  <fieldset>
+    <legend>入力</legend>
+
+    <input type="checkbox" id="spellcheck" name="spellcheck"/>
+    <label for="spellcheck">スペルチェック</label>
+
+    <label for="language-select">言語:</label>
+    <select id="language-select">
+      <option value="auto">自動</option>
+      <option value="text">テキスト</option>
+      <option value="velocity">Apache Velocity</option>
+      <option value="c_cpp">C/C++</option>
+      <option value="coldfusion">ColdFusion</option>
+      <option value="csharp">C#</option>
+      <option value="css">CSS</option>
+      <option value="csv">CSV</option>
+      <option value="dustjs">Dust.js</option>
+      <option value="ejs">EJS Template</option>
+      <option value="elm">Elm</option>
+      <option value="html_ruby">ERB(Ruby) Template</option>
+      <option value="go">Go</option>
+      <option value="handlebars">Handlebars</option>
+      <option value="html">HTML</option>
+      <option value="phphtml">HTML/PHP</option>
+      <option value="xhtml">HTML/xhtml</option>
+      <option value="twig">HTML TWIG Template</option>
+      <option value="java">Java</option>
+      <option value="javascript">JavaScript</option>
+      <option value="json">JSON</option>
+      <option value="jsp">JSTL (JSP)</option>
+      <option value="less">Less</option>
+      <option value="liquid">Liquid Template</option>
+      <option value="markdown">Markdown</option>
+      <option value="markup">Markup</option>
+      <option value="php">PHP</option>
+      <option value="qml">QML</option>
+      <option value="jsx">React JSX</option>
+      <option value="scss">SCSS</option>
+      <option value="silverstripe">SilverStripe</option>
+      <option value="swig">Swig</option>
+      <option value="titanium">Titanium Stylesheets</option>
+      <option value="typescript">TypeScript</option>
+      <option value="vapor">Vapor Leaf</option>
+      <option value="xml">XML</option>
+    </select>
+
+    <input type="checkbox" id="ignore-space"/>
+    <label for="ignore-space">空白を無視</label>
+  </fieldset>
+  <fieldset>
+    <legend>出力</legend>
+
+    <label for="theme-select">テーマ:</label>
+    <select id="theme-select">
+      <option value="white">White</option>
+      <option value="canvas">Canvas</option>
+      <option value="shadow">Shadow</option>
+    </select>
+
+    <label for="view-style-select">表示スタイル:</label>
+    <select id="view-style-select">
+      <option value="sidebyside">横並び</option>
+      <option value="inline">インライン</option>
+    </select>
+
+    <input type="checkbox" id="omit-same-lines"/>
+    <label for="omit-same-lines">同じ行を省略</label>
+  </fieldset>
+</details>
+<div>
+  <textarea name="text1" id="text1" spellcheck="false"></textarea>
+  <textarea name="text2" id="text2" spellcheck="false"></textarea>
+</div>
+<button id="execute_btn" type="button">差分表示</button>
+<div id="prettydiff" class="white"></div>
 <script>
-  function execute() {
-    const text1 = document.getElementById('text1').value;
-    const text2 = document.getElementById('text2').value;
-    window.prettydiff.options.source_label = "A";
-    window.prettydiff.options.source = text1;
-    window.prettydiff.options.diff_label = "B";
-    window.prettydiff.options.diff = text2;
-    window.prettydiff.options.mode = "diff";
-    window.prettydiff.options.language = "auto";
-    window.prettydiff.options.lexer = "text";
-    window.prettydiff.options.wrap = 0;
-    window.prettydiff.options.diff_view = "sidebyside";
-    const output = window.prettydiff();
-    document.getElementById("prettydiff").innerHTML = output;
-  }
+    const execute = function () {
+        const text1 = document.getElementById('text1').value;
+        const text2 = document.getElementById('text2').value;
+
+        let prettydiff = window.prettydiff;
+        prettydiff.options.source_label = "A";
+        prettydiff.options.source = text1;
+        prettydiff.options.diff_label = "B";
+        prettydiff.options.diff = text2;
+
+        prettydiff.options.language = document.getElementById("language-select").value;
+        prettydiff.options.lexer = "auto";
+
+        prettydiff.options.diff_space_ignore = document.getElementById("ignore-space").checked;
+
+        prettydiff.options.api = "dom";
+        prettydiff.options.mode = "diff";
+        prettydiff.options.diff_format = "html";
+        prettydiff.options.diff_view = document.getElementById("view-style-select").value;
+
+        prettydiff.options.diff_context = document.getElementById("omit-same-lines").checked ? 1 : Infinity;
+        prettydiff.options.wrap = 3;  // TODO:??
+
+        const output = prettydiff(); 
+        document.getElementById("prettydiff").innerHTML = output;
+    }
+
+    const changeSpellCheck = function(value) {
+        document.getElementById("text1").setAttribute("spellcheck", value);
+        document.getElementById("text2").setAttribute("spellcheck", value);
+    }
+
+    const changeTheme = function(theme) {
+        document.getElementById("prettydiff").setAttribute("class", theme);
+    }
+
+    document.getElementById("execute_btn")
+        .addEventListener('click', (event) => execute());
+    document.getElementById("spellcheck")
+        .addEventListener('change', event => changeSpellCheck(event.target.checked));
+    document.getElementById("theme-select")
+      .addEventListener('change', event => changeTheme(event.target.value));
+
+    changeSpellCheck(document.getElementById("spellcheck").value);
+    changeTheme(document.getElementById("theme-select").value);
 </script>
