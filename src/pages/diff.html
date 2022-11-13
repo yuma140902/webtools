@@ -135,6 +135,6 @@ head: "<script src='https://unpkg.com/prettydiff@101.2.6/js/browser.js'></script
     document.getElementById("theme-select")
       .addEventListener('change', event => changeTheme(event.target.value));
 
-    changeSpellCheck(document.getElementById("spellcheck").value);
+    changeSpellCheck(document.getElementById("spellcheck").checked);
     changeTheme(document.getElementById("theme-select").value);
 </script>
