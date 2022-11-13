@@ -93,7 +93,9 @@ head: |
 </div>
 <button id="execute_btn" type="button">差分表示</button>
 <div id="prettydiff" class="white"></div>
-<script>
+<script type="module">
+    import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
+
     const execute = function () {
         const text1 = document.getElementById('text1').value;
         const text2 = document.getElementById('text2').value;
@@ -117,7 +119,7 @@ head: |
         prettydiff.options.diff_context = document.getElementById("omit-same-lines").checked ? 1 : Infinity;
         prettydiff.options.wrap = 3;  // TODO:??
 
-        const output = prettydiff(); 
+        const output = prettydiff();
         document.getElementById("prettydiff").innerHTML = output;
     }
 
@@ -136,6 +138,21 @@ head: |
         .addEventListener('change', event => changeSpellCheck(event.target.checked));
     document.getElementById("theme-select")
       .addEventListener('change', event => changeTheme(event.target.value));
+
+    // save settings to cookie
+    document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
+        element.addEventListener('change', event => {
+            Cookies.set('difftool-'+event.target.id, event.target.value, { expires: 365 });
+        });
+    });
+
+    // resume settings from cookie
+    document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
+        const value = Cookies.get('difftool-'+element.id);
+        if(value !== undefined) {
+            element.value = value;
+        }
+    });
 
     changeSpellCheck(document.getElementById("spellcheck").checked);
     changeTheme(document.getElementById("theme-select").value);
