@@ -15,77 +15,96 @@ head: |
     #execute_btn {
         width: 94%;
     }
+
+    #settings {
+        display: flex;
+        flex-direction: row;
+    }
 </style>
-<details>
+<details open>
   <summary>詳細設定</summary>
-  <fieldset>
-    <legend>入力</legend>
+  <div id="settings">
+    <fieldset>
+      <legend>入力</legend>
 
-    <input type="checkbox" id="spellcheck" name="spellcheck"/>
-    <label for="spellcheck">スペルチェック</label>
+      <div>
+        <input type="checkbox" id="spellcheck" name="spellcheck"/>
+        <label for="spellcheck">スペルチェック</label>
+      </div>
 
-    <label for="language-select">言語:</label>
-    <select id="language-select">
-      <option value="auto">自動</option>
-      <option value="text">テキスト</option>
-      <option value="velocity">Apache Velocity</option>
-      <option value="c_cpp">C/C++</option>
-      <option value="coldfusion">ColdFusion</option>
-      <option value="csharp">C#</option>
-      <option value="css">CSS</option>
-      <option value="csv">CSV</option>
-      <option value="dustjs">Dust.js</option>
-      <option value="ejs">EJS Template</option>
-      <option value="elm">Elm</option>
-      <option value="html_ruby">ERB(Ruby) Template</option>
-      <option value="go">Go</option>
-      <option value="handlebars">Handlebars</option>
-      <option value="html">HTML</option>
-      <option value="phphtml">HTML/PHP</option>
-      <option value="xhtml">HTML/xhtml</option>
-      <option value="twig">HTML TWIG Template</option>
-      <option value="java">Java</option>
-      <option value="javascript">JavaScript</option>
-      <option value="json">JSON</option>
-      <option value="jsp">JSTL (JSP)</option>
-      <option value="less">Less</option>
-      <option value="liquid">Liquid Template</option>
-      <option value="markdown">Markdown</option>
-      <option value="markup">Markup</option>
-      <option value="php">PHP</option>
-      <option value="qml">QML</option>
-      <option value="jsx">React JSX</option>
-      <option value="scss">SCSS</option>
-      <option value="silverstripe">SilverStripe</option>
-      <option value="swig">Swig</option>
-      <option value="titanium">Titanium Stylesheets</option>
-      <option value="typescript">TypeScript</option>
-      <option value="vapor">Vapor Leaf</option>
-      <option value="xml">XML</option>
-    </select>
+      <div>
+        <input type="checkbox" id="ignore-space"/>
+        <label for="ignore-space">空白を無視</label>
+      </div>
 
-    <input type="checkbox" id="ignore-space"/>
-    <label for="ignore-space">空白を無視</label>
-  </fieldset>
-  <fieldset>
-    <legend>出力</legend>
+      <div>
+        <label for="language-select">言語:</label>
+        <select id="language-select">
+          <option value="auto">自動</option>
+          <option value="text">テキスト</option>
+          <option value="velocity">Apache Velocity</option>
+          <option value="c_cpp">C/C++</option>
+          <option value="coldfusion">ColdFusion</option>
+          <option value="csharp">C#</option>
+          <option value="css">CSS</option>
+          <option value="csv">CSV</option>
+          <option value="dustjs">Dust.js</option>
+          <option value="ejs">EJS Template</option>
+          <option value="elm">Elm</option>
+          <option value="html_ruby">ERB(Ruby) Template</option>
+          <option value="go">Go</option>
+          <option value="handlebars">Handlebars</option>
+          <option value="html">HTML</option>
+          <option value="phphtml">HTML/PHP</option>
+          <option value="xhtml">HTML/xhtml</option>
+          <option value="twig">HTML TWIG Template</option>
+          <option value="java">Java</option>
+          <option value="javascript">JavaScript</option>
+          <option value="json">JSON</option>
+          <option value="jsp">JSTL (JSP)</option>
+          <option value="less">Less</option>
+          <option value="liquid">Liquid Template</option>
+          <option value="markdown">Markdown</option>
+          <option value="markup">Markup</option>
+          <option value="php">PHP</option>
+          <option value="qml">QML</option>
+          <option value="jsx">React JSX</option>
+          <option value="scss">SCSS</option>
+          <option value="silverstripe">SilverStripe</option>
+          <option value="swig">Swig</option>
+          <option value="titanium">Titanium Stylesheets</option>
+          <option value="typescript">TypeScript</option>
+          <option value="vapor">Vapor Leaf</option>
+          <option value="xml">XML</option>
+        </select>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>出力</legend>
 
-    <label for="theme-select">テーマ:</label>
-    <select id="theme-select">
-      <option value="white">White</option>
-      <option value="canvas">Canvas</option>
-      <option value="shadow">Shadow</option>
-    </select>
+      <div>
+        <label for="theme-select">テーマ:</label>
+        <select id="theme-select">
+          <option value="white">White</option>
+          <option value="canvas">Canvas</option>
+          <option value="shadow">Shadow</option>
+        </select>
+      </div>
 
-    <label for="view-style-select">表示スタイル:</label>
-    <select id="view-style-select">
-      <option value="sidebyside">横並び</option>
-      <option value="inline">インライン</option>
-    </select>
+      <div>
+        <label for="view-style-select">表示スタイル:</label>
+        <select id="view-style-select">
+          <option value="sidebyside">横並び</option>
+          <option value="inline">インライン</option>
+        </select>
+      </div>
 
-    <input type="checkbox" id="omit-same-lines"/>
-    <label for="omit-same-lines">同じ行を省略</label>
-  </fieldset>
+      <div>
+        <input type="checkbox" id="omit-same-lines"/>
+        <label for="omit-same-lines">同じ行を省略</label>
+      </div>
+    </fieldset>
+  </div>
 </details>
 <div>
   <textarea name="text1" id="text1" spellcheck="false"></textarea>
