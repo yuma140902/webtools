@@ -10,7 +10,29 @@ body {
 }
 
 .header {
+  display: flex;
+  flex-direction: row;
   background: #afc2e0;
+}
+
+.header > * {
+  margin: 3px;
+}
+
+.header > .stretch {
+  flex-grow: 1;
+}
+
+.header > .navigator {
+  display: flex;
+}
+
+.header > .navigator > * {
+  align-self: flex-end;
+}
+
+.header h1 {
+  font-size: 16pt;
 }
 
 .main {
