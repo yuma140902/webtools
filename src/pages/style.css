@@ -43,6 +43,7 @@ a:hover {
   display: flex;
   flex-direction: row;
   background: var(--primary-color);
+  height: 56px;
 }
 
 .header > * {
