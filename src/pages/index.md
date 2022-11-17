@@ -1,5 +1,6 @@
 ---
 title: WebTools
+hideTitle: true
 author: yuma
 ---
 # WebTools
