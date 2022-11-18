@@ -34,6 +34,14 @@ a:hover {
   color: var(--link-hover-color);
 }
 
+a[target="_blank"]::after {
+	content: "\e89e";
+	font-family: 'Material Symbols Rounded';
+	font-weight: normal;
+	font-style: normal;
+	line-height: 1;
+}
+
 .container {
   min-height: 100vh;
   display: flex;
