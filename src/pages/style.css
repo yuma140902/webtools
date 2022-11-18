@@ -64,6 +64,11 @@ a[target="_blank"]::after {
   flex-grow: 1;
 }
 
+.header > a:link,
+.header > a:visited {
+  color: var(--link-hover-color);
+}
+
 /* 横幅が狭いときはハンバーガーメニューを表示する */
 @media screen and (max-width: 720px) {
   .header > .widemenu {
