@@ -206,6 +206,8 @@ a:hover {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
   line-height: 1.5;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 .markdown h1 {
   font-size: 2em;
