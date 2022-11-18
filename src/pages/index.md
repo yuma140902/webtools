@@ -9,5 +9,5 @@ author: yuma
 
 ## Repository
 
-<https://github.com/yuma140902/webtools>
+<a href="https://github.com/yuma140902/webtools" target="_blank">https://github.com/yuma140902/webtools</a>
 
