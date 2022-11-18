@@ -80,26 +80,14 @@ a[target="_blank"]::after {
     display: inline-block;
     cursor: pointer;
     width: 30px;
-    height: 20px;
-    vertical-align: middle;
+    height: 100%;
   }
 
   /* アイコン */
-  #drawer-icon-open span, #drawer-icon-open span:before, #drawer-icon-open span:after {
-    position: absolute;
-    height: 3px;/*線の太さ*/
-    width: 25px;/*長さ*/
-    border-radius: 3px;
-    background: var(--drawer-open-icon-color);
-    display: block;
-    content: '';
-    cursor: pointer;
-  }
-  #drawer-icon-open span:before {
-    bottom: -8px;
-  }
-  #drawer-icon-open span:after {
-    bottom: -16px;
+  #drawer-icon-open > span {
+    display: grid;
+    place-items: center;
+    height: 100%;
   }
 
   #drawer-close-area {
