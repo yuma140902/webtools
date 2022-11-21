@@ -162,6 +162,7 @@ a[target="_blank"]::after {
 @media screen and (min-width: 720px) {
   .header > .widemenu {
     display: flex;
+    font-family: sans-serif;
   }
 
   .header > .widemenu > * {
