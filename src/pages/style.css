@@ -45,6 +45,11 @@ a[target="_blank"]::after {
   font-size: 70%;
 }
 
+select {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
 .container {
   min-height: 100vh;
   display: flex;

@@ -6,6 +6,7 @@ author: yuma
 # WebTools
 
 - [Diff Tool](./diff.html)
+- [CSV to LaTeX](./csv2tex.html)
 
 ## Repository
 
