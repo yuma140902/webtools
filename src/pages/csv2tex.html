@@ -33,36 +33,33 @@ head: |
 <div>
   CSVファイルまたはエクセルの表をLaTeX形式に変換します
 </div>
-<details open>
-  <summary>詳細設定</summary>
-  <div id="settings">
-    <fieldset>
-      <legend>入力</legend>
+<div id="settings">
+  <fieldset>
+    <legend>詳細設定</legend>
 
-      <div>
-        <label for="delimiter">フィールド区切り:</label>
-        <select id="delimiter">
-          <option value="auto">自動</option>
-          <option value="comma">コンマ(,)</option>
-          <option value="tab">タブ</option>
-        </select>
-      </div>
+    <div>
+      <label for="delimiter">フィールド区切り:</label>
+      <select id="delimiter">
+        <option value="auto">自動</option>
+        <option value="comma">コンマ(,)</option>
+        <option value="tab">タブ</option>
+      </select>
+    </div>
 
-      <div>
-        <input type="checkbox" id="ignore-empty-lines"/>
-        <label for="ignore-empty-lines">空行を無視</label>
-      </div>
+    <div>
+      <input type="checkbox" id="ignore-empty-lines"/>
+      <label for="ignore-empty-lines">空行を無視</label>
+    </div>
 
-      <div>
-        <input type="checkbox" id="hash-comment"/>
-        <label for="hash-comment">#から始まる行を無視</label>
-      </div>
+    <div>
+      <input type="checkbox" id="hash-comment"/>
+      <label for="hash-comment">#から始まる行を無視</label>
+    </div>
 
-    </fieldset>
-  </div>
-</details>
+  </fieldset>
+</div>
 <div>
-  <textarea name="csv-input" id="csv-input" spellcheck="false" placeholder="エクセルからコピーして貼り付け/またはCSVを貼り付け"></textarea>
+  <textarea name="csv-input" id="csv-input" spellcheck="false" placeholder="エクセルからコピペ/またはCSVを貼り付け" autofocus></textarea>
 </div>
 <button id="execute_btn" type="button">変換＆変換結果をクリップボードにコピー</button>
 <div id="result-msg"></div>
@@ -83,7 +80,7 @@ head: |
     }
 
     const convertArrayArray = function(array_of_array) {
-        return array_of_array.map(row => row.join(' && ') + ' \\\\\n').join('');
+        return array_of_array.map(row => row.join(' & ') + ' \\\\\n').join('');
     }
 
     const execute = function () {
@@ -98,7 +95,7 @@ head: |
         const output = Papa.parse(csv_input, config);
         const tex = convertArrayArray(output.data);
 
-        document.getElementById("result-msg").innerHTML += "変換完了<br/>";
+        document.getElementById("result-msg").innerHTML = "変換完了<br/>";
         navigator.clipboard.writeText(tex).then(() => {
             document.getElementById("result-msg").innerHTML += "結果はクリップボードにコピーされました<br/>";
         }, () => {
