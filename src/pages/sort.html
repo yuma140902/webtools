@@ -1,0 +1,125 @@
+---
+title: Sort Visualizer
+author: yuma
+noMdConvert: true
+hideTitle: true
+fullContentWidth: true
+head: |
+  <script type="module" src="./sort.js"></script>
+---
+<style>
+    #settings {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .sort-flow {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sort-flow .sort-main {
+      flex-grow: 1;
+    }
+    
+    .sort-main {
+      min-height: 400px;
+    }
+</style>
+<div class="sort-flow">
+<div class="sort-header">
+  <h1 style="font-size: 16pt; padding: 0; margin: 0">Sort Visualizer</h1>
+  <div id="settings">
+    <fieldset>
+      <legend>データ設定</legend>
+
+      <div>
+        <label for="num-data">データの数:</label>
+        <input type="number" id="num-data" min="1" max="1024" value="64"/>
+      </div>
+
+      <div>
+        <label for="data-type">データ種類:</label>
+        <select id="data-type">
+          <option value="random">ランダム</option>
+        </select>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>アルゴリズム設定</legend>
+      <div>
+        <label for="">アルゴリズム:</label>
+        <select id="algo-type">
+          <option value="バブルソート">バブルソート</option>
+        </select>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>見た目の設定</legend>
+      <div>
+        <select id="gradation-type">
+          <option value="hsl">虹</option>
+          <option value="inferno">inferno</option>
+          <option value="gray">グレースケール</option>
+        </select>
+      </div>
+      <div>
+        <canvas id="gradation-canvas" height="20" width="100"></canvas>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>実行</legend>
+      <div>
+        <label for="step-interval">インターバル(ミリ秒):</label>
+        <br/>
+        <input id="step-interval" type="number" min="10" max="10000" step="10" value="50"/>
+      </div>
+      <div>
+        <button id="exec-step-by-step">実行</button>
+        <button id="stop-btn">停止</button>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>操作</legend>
+      <div>
+        <div>
+          <button id="reset-btn">リセット</button>
+        </div>
+        <div>
+          <button id="save-btn">画像を保存</button>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>実行結果</legend>
+      <div>比較回数: <span id="result-comparison"></span></div>
+      <div>スワップ回数: <span id="result-swap"></span></div>
+      <div>ステップ数: <span id="result-step"></span></div>
+    </fieldset>
+  </div>
+</div>
+<div class="sort-main">
+  <canvas id="output" height="300" width="100" style="border:1px solid var(--text-color)"></canvas>
+</div>
+</div>
+<script type="module">
+    import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
+
+    // save settings to cookie
+    document.querySelectorAll('select, input').forEach(element => {
+        element.addEventListener('change', event => {
+            Cookies.set('sort-'+event.target.id, event.target.value, { expires: 365 });
+        });
+    });
+
+    // resume settings from cookie
+    document.querySelectorAll('select, input').forEach(element => {
+        const value = Cookies.get('sort-'+element.id);
+        if(value !== undefined) {
+            element.value = value;
+        }
+    });
+</script>
+
