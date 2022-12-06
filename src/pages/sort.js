@@ -37,11 +37,13 @@ function generateData() {
 }
 
 function dataDrawer(canvas_, gradationFunc){
-  let row = 0;
+  let row = -1;
   const gradation = gradationFunc;
   const canvas = canvas_;
   const rowHeight = 4;
+
   function f(arr, markers) {
+    ++row;
     const width = canvas.width / arr.length;
     let ctx = canvas.getContext('2d');
     if(canvas.height < (row+1)*rowHeight) {
@@ -59,6 +61,8 @@ function dataDrawer(canvas_, gradationFunc){
       ctx.fillStyle = color;
       ctx.fillRect(i*width, row*rowHeight, width, rowHeight);
     }
+
+    ctx.clearRect(0, (row+1)*rowHeight, canvas.width, rowHeight+1+4);
     
     for(let i=0; i<markers.length; ++i) {
       ctx.fillStyle = 'red';
@@ -68,8 +72,6 @@ function dataDrawer(canvas_, gradationFunc){
       ctx.lineTo(markers[i]*width + width/2 + 2, (row+1)*rowHeight+1+4);
       ctx.fill();
     }
-
-    ++row;
   }
   return f;
 }
@@ -147,12 +149,18 @@ function getSorter() {
   else if(algo === 'insertion') {
     return insertionSort;
   }
+  else if(algo === 'shell') {
+    return shellSort;
+  }
+  else if(algo === 'quick') {
+    return quickSort;
+  }
 }
 
 function* bubbleSort(data, stat) {
   const len = data.length;
   for(let i = 0; i < len-1; ++i) {
-    for(let j = len-1; i+1 < j; --j) {
+    for(let j = len-1; i < j; --j) {
       if (gt(data[j-1], data[j], stat)) {
         swap(data, j-1, j, stat);
       }
@@ -206,6 +214,65 @@ function* insertionSort(data, stat) {
     }
     data[j+1] = w;
     ++stat.copy;
+  }
+}
+
+// TODO: rewrite
+function* shellSort(data, stat) {
+  const len = data.length;
+  let h;
+  for (h = 1; h < len / 9; h = h*3+1);
+  console.log("h", h);
+  for(; h > 0; h = Math.floor(h/3)) {
+    for(let i = h; i < len; ++i) {
+      for(let j = i; j >= h && gt(data[j-h], data[j], stat); j -= h) {
+        swap(data, j, j-h, stat);
+        ++stat.step;
+        yield {arr: data, markers: [i, j, j-h]};
+      }
+    }
+  }
+}
+
+// TODO: rewrite
+function* quickSort(data, stat) {
+  function median3(a, b, c) {
+    let min = a;
+    let mid = b;
+    let max = c;
+    if(min > max) {let tmp = min; min = max; max = tmp;}
+    if(min > mid) {let tmp = min; min = mid; mid = min;}
+    if(mid > max) {let tmp = mid; mid = max; max = mid;}
+    return mid;
+  }
+
+  let stack = [];
+  stack.push({first: 0, last: data.length-1})
+
+  while(stack.length > 0) {
+    let d = stack.pop();
+    let first = d.first;
+    let last = d.last;
+
+    if(last - first <= 0) continue;
+
+    let pivot = median3(data[first], data[Math.floor((first+last)/2)], data[last]);
+
+    let l = first;
+    let r = last;
+    while(l <= r) {
+      while(l < last && gt(data[l], pivot, stat)) ++l;
+      while(r > first && !gt(data[r], pivot, stat)) --r;
+      if(l > r) break;
+      swap(data, l, r, stat);
+      ++stat.step;
+      yield {arr: data, markers: [l, r]};
+      ++l;
+      --r;
+    }
+
+    stack.push({first: first, last: l-1})
+    stack.push({first: l, last: last})
   }
 }
 
