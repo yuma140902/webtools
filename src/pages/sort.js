@@ -1,10 +1,8 @@
-import Colormap from './colormap.js';
-
 function swap(data, a, b, stat) {
   const tmp = data[a];
   data[a] = data[b];
   data[b] = tmp;
-  ++stat.swap;
+  stat.copy += 3;
 }
 
 function gt(lhs, rhs, stat) {
@@ -22,7 +20,7 @@ function fromPercent(min, max, percent) {
 
 function showStat(stat) {
   document.getElementById("result-comparison").innerText = stat.comp;
-  document.getElementById("result-swap").innerText = stat.swap;
+  document.getElementById("result-copy").innerText = stat.copy;
   document.getElementById("result-step").innerText = stat.step;
 }
 
@@ -42,7 +40,7 @@ function dataDrawer(canvas_, gradationFunc){
   let row = 0;
   const gradation = gradationFunc;
   const canvas = canvas_;
-  const rowHeight = 2;
+  const rowHeight = 4;
   function f(arr, markers) {
     const width = canvas.width / arr.length;
     let ctx = canvas.getContext('2d');
@@ -66,8 +64,8 @@ function dataDrawer(canvas_, gradationFunc){
       ctx.fillStyle = 'red';
       ctx.beginPath();
       ctx.moveTo(markers[i]*width + width/2, (row+1)*rowHeight+1);
-      ctx.lineTo(markers[i]*width + width/2 - 4, (row+1)*rowHeight+1+8);
-      ctx.lineTo(markers[i]*width + width/2 + 4, (row+1)*rowHeight+1+8);
+      ctx.lineTo(markers[i]*width + width/2 - 2, (row+1)*rowHeight+1+4);
+      ctx.lineTo(markers[i]*width + width/2 + 2, (row+1)*rowHeight+1+4);
       ctx.fill();
     }
 
@@ -84,8 +82,8 @@ function getGradation(min, max) {
   else if(type == "hsl") {
     return gradationHsl(min, max);
   }
-  else if(type == "inferno") {
-    return gradationInferno(min, max);
+  else {
+    return gradationColormapLib(type)(min, max);
   }
 }
 
@@ -113,22 +111,42 @@ function gradationHsl(min_, max_) {
   return f;
 }
 
-function gradationInferno(min_, max_) {
-  const min = min_;
-  const max = max_;
-  const colors = Colormap({
-    colormap: 'jet',
-    nshades: document.getElementById("num-data").value,
-    format: 'hex',
-    alpha: 1
-  })
+function gradationColormapLib(name_) {
+  const name = name_;
+  function g(min_, max_) {
+    const min = min_;
+    const max = max_;
+    const colors = window.Colormap({
+      colormap: name,
+      nshades: document.getElementById("num-data").value,
+      format: 'hex',
+      alpha: 1
+    })
 
-  function f(value) {
-    const p = toPercent(min, max, value);
-    const color = colors[fromPercent(0, colors.length, p)];
-    return color;
+    function f(value) {
+      const p = toPercent(min, max, value);
+      const color = colors[Math.floor(fromPercent(0, colors.length-1, p))];
+      return color;
+    }
+    return f;
   }
-  return f;
+  return g;
+}
+
+function getSorter() {
+  const algo = document.getElementById("algo-type").value;
+  if(algo === 'bubble') {
+    return bubbleSort;
+  }
+  else if(algo === 'simple') {
+    return simpleSort;
+  }
+  else if(algo === 'selection') {
+    return selectionSort;
+  }
+  else if(algo === 'insertion') {
+    return insertionSort;
+  }
 }
 
 function* bubbleSort(data, stat) {
@@ -144,21 +162,71 @@ function* bubbleSort(data, stat) {
   }
 }
 
+function* simpleSort(data, stat) {
+  const len = data.length;
+  for(let i = 0; i < len-1; ++i) {
+    for(let j = i+1; j < len; ++j) {
+      if(gt(data[i], data[j], stat)) {
+        swap(data, i, j, stat);
+      }
+      ++stat.step;
+      yield {arr: data, markers: [i, j]};
+    }
+  }
+}
+
+function* selectionSort(data, stat) {
+  const len = data.length;
+  let minpos = 0;
+  for(let i = 0; i < len-1; ++i) {
+    for(let j = i+1; j < len; ++j) {
+      if(gt(data[minpos], data[j], stat)) {
+        minpos = j;
+      }
+      ++stat.step;
+      yield {arr: data, markers: [i, j]};
+    }
+    swap(data, i, minpos, stat);
+  }
+}
+
+function* insertionSort(data, stat) {
+  const len = data.length;
+  let minpos = 0;
+  let w;
+  for(let i = 1; i < len; ++i) {
+    w = data[i];
+    let j = i - 1;
+    while(gt(data[j], w, stat) && j >= 0) {
+      data[j+1] = data[j];
+      --j;
+      ++stat.copy;
+      ++stat.step;
+      yield {arr: data, markers: [i, j]};
+    }
+    data[j+1] = w;
+    ++stat.copy;
+  }
+}
+
 let stopExecution = false;
 
 const executeStepByStep = async function() {
+  const canvas = document.getElementById("output");
+  const width = document.querySelector(".sort-main").clientWidth;
+  canvas.width = Math.min(width - 20, 4 * document.getElementById("num-data").value);
+  console.log("set #output width", width);
   stopExecution = false;
   document.getElementById("exec-step-by-step").setAttribute("disabled", true);
-  const canvas = document.getElementById("output");
 
   const wait = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  let stat = {swap: 0, comp: 0, step: 0};
+  let stat = {copy: 0, comp: 0, step: 0};
   let data = generateData();
   let draw = dataDrawer(canvas, getGradation(
     Math.min(...data),
     Math.max(...data)));
-  let iter = bubbleSort(data, stat);
+  let iter = getSorter()(data, stat);
   let v;
   draw(data, []);
   while(!(v = iter.next()).done) {

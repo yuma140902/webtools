@@ -6,12 +6,21 @@ hideTitle: true
 fullContentWidth: true
 head: |
   <script type="module" src="./sort.js"></script>
+  <script src="./colormap.js"></script>
 ---
 <style>
     #settings {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+    }
+
+    .sort-header {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .sort-flow {
@@ -36,7 +45,17 @@ head: |
 
       <div>
         <label for="num-data">データの数:</label>
-        <input type="number" id="num-data" min="1" max="1024" value="64"/>
+        <datalist id="num-data-list">
+          <option value="8" />
+          <option value="16" />
+          <option value="32" />
+          <option value="64" />
+          <option value="128" />
+          <option value="256" />
+          <option value="512" />
+          <option value="1024" />
+        </datalist>
+        <input type="number" id="num-data" min="1" max="1024" value="32" list="num-data-list"/>
       </div>
 
       <div>
@@ -51,7 +70,10 @@ head: |
       <div>
         <label for="">アルゴリズム:</label>
         <select id="algo-type">
-          <option value="バブルソート">バブルソート</option>
+          <option value="bubble">バブルソート</option>
+          <option value="simple">シンプルソート</option>
+          <option value="selection">選択ソート</option>
+          <option value="insertion">挿入ソート</option>
         </select>
       </div>
     </fieldset>
@@ -59,9 +81,48 @@ head: |
       <legend>見た目の設定</legend>
       <div>
         <select id="gradation-type">
+          <option value="inferno">Inferno</option>
           <option value="hsl">虹</option>
-          <option value="inferno">inferno</option>
           <option value="gray">グレースケール</option>
+          <option value="jet">Jet</option>
+          <option value="hsv">HSV</option>
+          <option value="hot">Hot</option>
+          <option value="cool">Cool</option>
+          <option value="spring">Spring</option>
+          <option value="summer">Summer</option>
+          <option value="autumn">Autumn</option>
+          <option value="winter">Winter</option>
+          <option value="bone">Bone</option>
+          <option value="copper">Copper</option>
+          <option value="YlGnBu">YlGnBu</option>
+          <option value="greens">Greens</option>
+          <option value="YlOrRd">YlOrRd</option>
+          <option value="bluered">Bluered</option>
+          <option value="RdBu">RdBu</option>
+          <option value="picnic">Picnic</option>
+          <option value="portland">Portland</option>
+          <option value="blackbody">Blackbody</option>
+          <option value="earth">Earth</option>
+          <option value="electric">Electric</option>
+          <option value="viridis">Viridis</option>
+          <option value="magma">Magma</option>
+          <option value="plasma">Plasma</option>
+          <option value="warm">Warm</option>
+          <option value="rainbow-soft">Rainbow-soft</option>
+          <option value="bathymetry">Bathymetry</option>
+          <option value="cdom">Cdom</option>
+          <option value="chlorophyll">Chlorophyll</option>
+          <option value="density">Density</option>
+          <option value="freesurface-blue">Freesurface-blue</option>
+          <option value="freesurface-red">Freesurface-red</option>
+          <option value="oxygen">Oxygen</option>
+          <option value="par">Par</option>
+          <option value="phase">Phase</option>
+          <option value="salinity">Salinity</option>
+          <option value="temperature">Temperature</option>
+          <option value="velocity-blue">Velocity-blue</option>
+          <option value="velocity-green">Velocity-green</option>
+          <option value="cubehelix">Cubehelix</option>
         </select>
       </div>
       <div>
@@ -95,13 +156,13 @@ head: |
     <fieldset>
       <legend>実行結果</legend>
       <div>比較回数: <span id="result-comparison"></span></div>
-      <div>スワップ回数: <span id="result-swap"></span></div>
+      <div>コピー回数: <span id="result-copy"></span></div>
       <div>ステップ数: <span id="result-step"></span></div>
     </fieldset>
   </div>
 </div>
 <div class="sort-main">
-  <canvas id="output" height="300" width="100" style="border:1px solid var(--text-color)"></canvas>
+  <canvas id="output" height="300" width="100" style="border:1px solid var(--text-color); margin-left: auto; margin-right: auto; padding-left: 0; padding-right: 0; display: block;"></canvas>
 </div>
 </div>
 <script type="module">
