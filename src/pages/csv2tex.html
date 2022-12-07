@@ -56,6 +56,11 @@ head: |
       <label for="hash-comment">#から始まる行を無視</label>
     </div>
 
+    <div>
+      <input type="checkbox" id="insert-hline"/>
+      <label for="insert-hline">\hlineを挿入</label>
+    </div>
+
   </fieldset>
 </div>
 <div>
@@ -80,7 +85,10 @@ head: |
     }
 
     const convertArrayArray = function(array_of_array) {
-        return array_of_array.map(row => row.join(' & ') + ' \\\\\n').join('');
+        const row_delim = ' & ';
+        const hline = document.getElementById("insert-hline").checked;
+        const column_delim = hline ? ' \\\\ \\hline\n' : ' \\\\\n';
+        return array_of_array.map(row => row.join(row_delim) + column_delim).join('');
     }
 
     const execute = function () {
