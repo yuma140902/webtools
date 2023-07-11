@@ -131,6 +131,12 @@ select {
     -webkit-transform: translateX(-105%);
     transform: translateX(-105%);
   }
+  #drawer-menu hr {
+    border-top: 1px solid #fff;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+  }
 
   /*チェックがついたら表示させる*/
   #drawer-checkbox:checked ~ #drawer-close-area {
