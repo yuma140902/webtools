@@ -181,11 +181,11 @@ select {
     display: grid;
     height: 100%;
     place-items: center;
-    margin-left: 0.5em;
+    margin-left: 1em;
   }
 
   .header > .widemenu > *:last-child {
-    margin-right: 0.5em;
+    margin-right: 1em;
   }
 
   .header > .drawer {
