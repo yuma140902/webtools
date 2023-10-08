@@ -20,6 +20,11 @@ body.dark {
   --link-hover-color: white;
   --drawer-open-icon-color: #ededed;
   --code-bg-color: rgba(110, 118, 129, 0.4);
+  color-scheme: dark;
+}
+
+body.light {
+  color-scheme: light;
 }
 
 body {
