@@ -8,7 +8,6 @@
   --drawer-open-icon-color: #555;
   --code-bg-color: rgba(27, 31, 35, 0.05);
   --content-max-width: 1012px;
-  color-scheme: dark light;
 }
 
 body.dark {
