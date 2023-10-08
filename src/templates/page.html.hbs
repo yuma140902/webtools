@@ -18,6 +18,16 @@
     {{#if front.og.image.alt}}<meta property="og:image:alt" content="{{front.og.image.alt}}" />{{/if}}
     {{#if front.og.locale}}<meta property="og:locale" content="{{front.og.locale}}" />{{/if}}
     {{#if front.og.description}}<meta property="og:description" content="{{front.og.description}}" />{{/if}}
+    {{#if front.customAppleTouchIcon}}
+    <link rel="apple-touch-icon" type="image/png" href="{{front.customAppleTouchIcon}}">
+    {{else}}
+    <link rel="apple-touch-icon" type="image/png" href="/apple-touch-icon-180x180.png">
+    {{/if}}
+    {{#if front.customFavicon}}
+    <link rel="icon" type="image/vnd.microsoft.icon" href="{{front.customFavicon}}">
+    {{else}}
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
+    {{/if}}
     <title>{{front.title}} - yuma14</title>
   </head>
   <body class="container">
