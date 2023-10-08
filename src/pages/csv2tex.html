@@ -127,7 +127,7 @@ og:
   // resume settings from Local Storage
   document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
     const value = localStorage.getItem('csv2tex-' + element.id);
-    if (value !== undefined) {
+    if (value) {
       element.value = value;
     }
   });

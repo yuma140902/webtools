@@ -182,7 +182,7 @@ og:
     // resume settings from Local Storage
     document.querySelectorAll('select, input').forEach(element => {
         const value = localStorage.getItem('sort-'+element.id);
-        if(value !== undefined) {
+        if(value) {
             element.value = value;
         }
     });
