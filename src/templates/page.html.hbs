@@ -73,9 +73,7 @@
       このサイトは拙作のRust製静的サイトジェネレーター<a href="https://github.com/yuma140902/tempura" target="_blank">Tempura</a>で作られました
     </footer>
 
-    <script type="module">
-      import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
-
+    <script>
       const updateTheme = theme => {
           if(theme !== 'dark' && theme !== 'light') {
             if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -105,12 +103,12 @@
         element.addEventListener('change', event => {
           let theme = event.target.value;
           updateTheme(theme);
-          Cookies.set('theme', event.target.value, { expires: 365, samesite: 'Lax' });
+          localStorage.setItem('theme', event.target.value);
         });
       });
 
-      /* Cookieから復元 */
-      const theme = Cookies.get('theme');
+      /* Local Storageから復元 */
+      const theme = localStorage.getItem('theme');
       document.querySelectorAll('select.theme-select').forEach(element => {
         element.value = theme ?? 'auto';
         updateTheme(element.value);
