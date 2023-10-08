@@ -6,29 +6,33 @@ hideTitle: false
 fullContentWidth: true
 head: |
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+og:
+  title: CSV to LaTeX
+  locale: ja_JP
+  description: エクセルの表やCSVをLaTeX形式に変換する。タブ区切りのCSV・#から始まる行を無視も可能
 ---
 <style>
-    #csv-input {
-        box-sizing: border-box;
-        width: 90vw;
-        height: 50vh;
-    }
+  #csv-input {
+    box-sizing: border-box;
+    width: 90vw;
+    height: 50vh;
+  }
 
-    textarea#result {
-        box-sizing: border-box;
-        width: 90vw;
-        height: 20vh;
-    }
+  textarea#result {
+    box-sizing: border-box;
+    width: 90vw;
+    height: 20vh;
+  }
 
-    #execute_btn {
-        width: 94%;
-        font-size: 200%;
-    }
+  #execute_btn {
+    width: 94%;
+    font-size: 200%;
+  }
 
-    #settings {
-        display: flex;
-        flex-direction: row;
-    }
+  #settings {
+    display: flex;
+    flex-direction: row;
+  }
 </style>
 <div>
   CSVファイルまたはエクセルの表をLaTeX形式に変換します
@@ -47,17 +51,17 @@ head: |
     </div>
 
     <div>
-      <input type="checkbox" id="ignore-empty-lines"/>
+      <input type="checkbox" id="ignore-empty-lines" />
       <label for="ignore-empty-lines">空行を無視</label>
     </div>
 
     <div>
-      <input type="checkbox" id="hash-comment"/>
+      <input type="checkbox" id="hash-comment" />
       <label for="hash-comment">#から始まる行を無視</label>
     </div>
 
     <div>
-      <input type="checkbox" id="insert-hline"/>
+      <input type="checkbox" id="insert-hline" />
       <label for="insert-hline">\hlineを挿入</label>
     </div>
 
@@ -70,63 +74,63 @@ head: |
 <div id="result-msg"></div>
 <textarea id="result" spellcheck="false" readonly="true" placeholder="変換結果"></textarea>
 <script type="module">
-    import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
+  import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
 
-    const mapDelimiter = function(value) {
-        if(value == 'comma') {
-            return ',';
-        }
-        else if(value == 'tab') {
-            return '\t';
-        }
-        else {
-            return '';
-        }
+  const mapDelimiter = function (value) {
+    if (value == 'comma') {
+      return ',';
     }
-
-    const convertArrayArray = function(array_of_array) {
-        const row_delim = ' & ';
-        const hline = document.getElementById("insert-hline").checked;
-        const column_delim = hline ? ' \\\\ \\hline\n' : ' \\\\\n';
-        return array_of_array.map(row => row.join(row_delim) + column_delim).join('');
+    else if (value == 'tab') {
+      return '\t';
     }
-
-    const execute = function () {
-        const csv_input = document.getElementById('csv-input').value;
-
-        const config = {
-            delimiter: mapDelimiter(document.getElementById('delimiter').value),
-            skipEmptyLines: document.getElementById('ignore-empty-lines').checked,
-            comments: document.getElementById('hash-comment').checked ? '#' : undefined
-        };
-
-        const output = Papa.parse(csv_input, config);
-        const tex = convertArrayArray(output.data);
-
-        document.getElementById("result-msg").innerHTML = "変換完了<br/>";
-        navigator.clipboard.writeText(tex).then(() => {
-            document.getElementById("result-msg").innerHTML += "結果はクリップボードにコピーされました<br/>";
-        }, () => {
-            document.getElementById("result-msg").innerHTML += "結果をクリップボードにコピーできませんでした<br/>";
-        });
-        document.getElementById("result").value = tex;
+    else {
+      return '';
     }
+  }
 
-    document.getElementById("execute_btn")
-        .addEventListener('click', (event) => execute());
+  const convertArrayArray = function (array_of_array) {
+    const row_delim = ' & ';
+    const hline = document.getElementById("insert-hline").checked;
+    const column_delim = hline ? ' \\\\ \\hline\n' : ' \\\\\n';
+    return array_of_array.map(row => row.join(row_delim) + column_delim).join('');
+  }
 
-    // save settings to cookie
-    document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
-        element.addEventListener('change', event => {
-            Cookies.set('csv2tex-'+event.target.id, event.target.value, { expires: 365 });
-        });
+  const execute = function () {
+    const csv_input = document.getElementById('csv-input').value;
+
+    const config = {
+      delimiter: mapDelimiter(document.getElementById('delimiter').value),
+      skipEmptyLines: document.getElementById('ignore-empty-lines').checked,
+      comments: document.getElementById('hash-comment').checked ? '#' : undefined
+    };
+
+    const output = Papa.parse(csv_input, config);
+    const tex = convertArrayArray(output.data);
+
+    document.getElementById("result-msg").innerHTML = "変換完了<br/>";
+    navigator.clipboard.writeText(tex).then(() => {
+      document.getElementById("result-msg").innerHTML += "結果はクリップボードにコピーされました<br/>";
+    }, () => {
+      document.getElementById("result-msg").innerHTML += "結果をクリップボードにコピーできませんでした<br/>";
     });
+    document.getElementById("result").value = tex;
+  }
 
-    // resume settings from cookie
-    document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
-        const value = Cookies.get('csv2tex-'+element.id);
-        if(value !== undefined) {
-            element.value = value;
-        }
+  document.getElementById("execute_btn")
+    .addEventListener('click', (event) => execute());
+
+  // save settings to cookie
+  document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
+    element.addEventListener('change', event => {
+      Cookies.set('csv2tex-' + event.target.id, event.target.value, {expires: 365});
     });
+  });
+
+  // resume settings from cookie
+  document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
+    const value = Cookies.get('csv2tex-' + element.id);
+    if (value !== undefined) {
+      element.value = value;
+    }
+  });
 </script>

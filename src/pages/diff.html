@@ -7,22 +7,26 @@ fullContentWidth: true
 head: |
   <script src="https://cdn.jsdelivr.net/npm/prettydiff@101.2.6/js/browser.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prettydiff@101.2.6/css/index.min.css">
+og:
+  title: Diff Tool
+  locale: ja_JP
+  description: 2つのテキストの差分を表示する。空白の無視、スペルチェックも可能
 ---
 <style>
-    textarea {
-        box-sizing: border-box;
-        width: 47%;
-        height: 60vh;
-    }
+  textarea {
+    box-sizing: border-box;
+    width: 47%;
+    height: 60vh;
+  }
 
-    #execute_btn {
-        width: 94%;
-    }
+  #execute_btn {
+    width: 94%;
+  }
 
-    #settings {
-        display: flex;
-        flex-direction: row;
-    }
+  #settings {
+    display: flex;
+    flex-direction: row;
+  }
 </style>
 <details open>
   <summary>詳細設定</summary>
@@ -31,12 +35,12 @@ head: |
       <legend>入力</legend>
 
       <div>
-        <input type="checkbox" id="spellcheck" name="spellcheck"/>
+        <input type="checkbox" id="spellcheck" name="spellcheck" />
         <label for="spellcheck">スペルチェック</label>
       </div>
 
       <div>
-        <input type="checkbox" id="ignore-space"/>
+        <input type="checkbox" id="ignore-space" />
         <label for="ignore-space">空白を無視</label>
       </div>
 
@@ -103,7 +107,7 @@ head: |
       </div>
 
       <div>
-        <input type="checkbox" id="omit-same-lines"/>
+        <input type="checkbox" id="omit-same-lines" />
         <label for="omit-same-lines">同じ行を省略</label>
       </div>
     </fieldset>
@@ -116,66 +120,66 @@ head: |
 <button id="execute_btn" type="button">差分表示</button>
 <div id="prettydiff" class="white"></div>
 <script type="module">
-    import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
+  import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
 
-    const execute = function () {
-        const text1 = document.getElementById('text1').value;
-        const text2 = document.getElementById('text2').value;
+  const execute = function () {
+    const text1 = document.getElementById('text1').value;
+    const text2 = document.getElementById('text2').value;
 
-        let prettydiff = window.prettydiff;
-        prettydiff.options.source_label = "A";
-        prettydiff.options.source = text1;
-        prettydiff.options.diff_label = "B";
-        prettydiff.options.diff = text2;
+    let prettydiff = window.prettydiff;
+    prettydiff.options.source_label = "A";
+    prettydiff.options.source = text1;
+    prettydiff.options.diff_label = "B";
+    prettydiff.options.diff = text2;
 
-        prettydiff.options.language = document.getElementById("language-select").value;
-        prettydiff.options.lexer = "auto";
+    prettydiff.options.language = document.getElementById("language-select").value;
+    prettydiff.options.lexer = "auto";
 
-        prettydiff.options.diff_space_ignore = document.getElementById("ignore-space").checked;
+    prettydiff.options.diff_space_ignore = document.getElementById("ignore-space").checked;
 
-        prettydiff.options.api = "dom";
-        prettydiff.options.mode = "diff";
-        prettydiff.options.diff_format = "html";
-        prettydiff.options.diff_view = document.getElementById("view-style-select").value;
+    prettydiff.options.api = "dom";
+    prettydiff.options.mode = "diff";
+    prettydiff.options.diff_format = "html";
+    prettydiff.options.diff_view = document.getElementById("view-style-select").value;
 
-        prettydiff.options.diff_context = document.getElementById("omit-same-lines").checked ? 1 : Infinity;
-        prettydiff.options.wrap = 3;  // TODO:??
+    prettydiff.options.diff_context = document.getElementById("omit-same-lines").checked ? 1 : Infinity;
+    prettydiff.options.wrap = 3;  // TODO:??
 
-        const output = prettydiff();
-        document.getElementById("prettydiff").innerHTML = output;
-    }
+    const output = prettydiff();
+    document.getElementById("prettydiff").innerHTML = output;
+  }
 
-    const changeSpellCheck = function(value) {
-        document.getElementById("text1").setAttribute("spellcheck", value);
-        document.getElementById("text2").setAttribute("spellcheck", value);
-    }
+  const changeSpellCheck = function (value) {
+    document.getElementById("text1").setAttribute("spellcheck", value);
+    document.getElementById("text2").setAttribute("spellcheck", value);
+  }
 
-    const changeTheme = function(theme) {
-        document.getElementById("prettydiff").setAttribute("class", theme);
-    }
+  const changeTheme = function (theme) {
+    document.getElementById("prettydiff").setAttribute("class", theme);
+  }
 
-    document.getElementById("execute_btn")
-        .addEventListener('click', (event) => execute());
-    document.getElementById("spellcheck")
-        .addEventListener('change', event => changeSpellCheck(event.target.checked));
-    document.getElementById("theme-select")
-      .addEventListener('change', event => changeTheme(event.target.value));
+  document.getElementById("execute_btn")
+    .addEventListener('click', (event) => execute());
+  document.getElementById("spellcheck")
+    .addEventListener('change', event => changeSpellCheck(event.target.checked));
+  document.getElementById("theme-select")
+    .addEventListener('change', event => changeTheme(event.target.value));
 
-    // save settings to cookie
-    document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
-        element.addEventListener('change', event => {
-            Cookies.set('difftool-'+event.target.id, event.target.value, { expires: 365 });
-        });
+  // save settings to cookie
+  document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
+    element.addEventListener('change', event => {
+      Cookies.set('difftool-' + event.target.id, event.target.value, {expires: 365});
     });
+  });
 
-    // resume settings from cookie
-    document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
-        const value = Cookies.get('difftool-'+element.id);
-        if(value !== undefined) {
-            element.value = value;
-        }
-    });
+  // resume settings from cookie
+  document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
+    const value = Cookies.get('difftool-' + element.id);
+    if (value !== undefined) {
+      element.value = value;
+    }
+  });
 
-    changeSpellCheck(document.getElementById("spellcheck").checked);
-    changeTheme(document.getElementById("theme-select").value);
+  changeSpellCheck(document.getElementById("spellcheck").checked);
+  changeTheme(document.getElementById("theme-select").value);
 </script>
