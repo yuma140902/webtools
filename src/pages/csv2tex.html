@@ -73,9 +73,7 @@ og:
 <button id="execute_btn" type="button">変換＆変換結果をクリップボードにコピー</button>
 <div id="result-msg"></div>
 <textarea id="result" spellcheck="false" readonly="true" placeholder="変換結果"></textarea>
-<script type="module">
-  import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
-
+<script>
   const mapDelimiter = function (value) {
     if (value == 'comma') {
       return ',';
@@ -119,16 +117,16 @@ og:
   document.getElementById("execute_btn")
     .addEventListener('click', (event) => execute());
 
-  // save settings to cookie
+  // save settings to Local Storage
   document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
     element.addEventListener('change', event => {
-      Cookies.set('csv2tex-' + event.target.id, event.target.value, {expires: 365});
+      localStorage.setItem('csv2tex-' + event.target.id, event.target.value, {expires: 365});
     });
   });
 
-  // resume settings from cookie
+  // resume settings from Local Storage
   document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
-    const value = Cookies.get('csv2tex-' + element.id);
+    const value = localStorage.getItem('csv2tex-' + element.id);
     if (value !== undefined) {
       element.value = value;
     }

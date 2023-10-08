@@ -171,19 +171,17 @@ og:
   <canvas id="output" height="300" width="100" style="border:1px solid var(--text-color); margin-left: auto; margin-right: auto; padding-left: 0; padding-right: 0; display: block;"></canvas>
 </div>
 </div>
-<script type="module">
-    import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
-
-    // save settings to cookie
+<script>
+    // save settings to Local Storage
     document.querySelectorAll('select, input').forEach(element => {
         element.addEventListener('change', event => {
-            Cookies.set('sort-'+event.target.id, event.target.value, { expires: 365 });
+            localStorage.setItem('sort-'+event.target.id, event.target.value, { expires: 365 });
         });
     });
 
-    // resume settings from cookie
+    // resume settings from Local Storage
     document.querySelectorAll('select, input').forEach(element => {
-        const value = Cookies.get('sort-'+element.id);
+        const value = localStorage.getItem('sort-'+element.id);
         if(value !== undefined) {
             element.value = value;
         }

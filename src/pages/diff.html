@@ -119,9 +119,7 @@ og:
 </div>
 <button id="execute_btn" type="button">差分表示</button>
 <div id="prettydiff" class="white"></div>
-<script type="module">
-  import Cookies from 'https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.mjs';
-
+<script>
   const execute = function () {
     const text1 = document.getElementById('text1').value;
     const text2 = document.getElementById('text2').value;
@@ -165,16 +163,16 @@ og:
   document.getElementById("theme-select")
     .addEventListener('change', event => changeTheme(event.target.value));
 
-  // save settings to cookie
+  // save settings to Local Storage
   document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
     element.addEventListener('change', event => {
-      Cookies.set('difftool-' + event.target.id, event.target.value, {expires: 365});
+      localStorage.setItem('difftool-' + event.target.id, event.target.value, {expires: 365});
     });
   });
 
-  // resume settings from cookie
+  // resume settings from Local Storage
   document.querySelectorAll('select, input[type=checkbox]').forEach(element => {
-    const value = Cookies.get('difftool-' + element.id);
+    const value = localStorage.getItem('difftool-' + element.id);
     if (value !== undefined) {
       element.value = value;
     }
